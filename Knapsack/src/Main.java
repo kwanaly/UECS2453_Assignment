@@ -32,7 +32,7 @@ public class Main {
 		}
 		
 		//Initial stage
-		Node initialNode = new Node (-1);
+		BnBNode initialNode = new BnBNode (-1);
 		System.out.println("===Initial Node===");
 		
 		
@@ -42,7 +42,7 @@ public class Main {
 
 	}
 	
-	public static void BranchandBound(Queue<Course> q,Node node,double maxC) {
+	public static void BranchandBound(Queue<Course> q,BnBNode node,double maxC) {
 		
 		
 		if (!(q.isEmpty())) {
@@ -52,8 +52,8 @@ public class Main {
 			
 			int s = node.stage+1;
 			System.out.println("Stage "+s);
-			Node node1= new Node(s,c1);
-			Node node0= new Node(s,c0);
+			BnBNode node1= new BnBNode(s,c1);
+			BnBNode node0= new BnBNode(s,c0);
 			
 			
 			
@@ -102,7 +102,7 @@ public class Main {
 		
 	}
 	
-	public static Node ComputeBound(Queue<Course> q,Node node,double maxC) {
+	public static BnBNode ComputeBound(Queue<Course> q,BnBNode node,double maxC) {
 		Iterator<Course> iterator = q.iterator();
 		while(iterator.hasNext()) {
 			Course c = iterator.next();
