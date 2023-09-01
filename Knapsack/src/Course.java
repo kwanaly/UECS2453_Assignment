@@ -1,16 +1,13 @@
 
 public class Course extends CourseAbstract {
-
-	
 	
 	//Constructor
 	public Course(String name,double weight,double value) {
 		super(name,weight,value);
 	}
 	
-	public double ValuePerWeight() {
+	public double valuePerWeight() {
 		return (super.value/super.weight);
-		
 	}
 	
 	public String getName() {
@@ -24,9 +21,6 @@ public class Course extends CourseAbstract {
 	public double getValue() {
 		return super.value;
 	}
-
-	
-	
 	
 	public void setWeight(double weight) {
 		super.weight=weight;
