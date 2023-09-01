@@ -1,25 +1,66 @@
 import java.util.*;
 
 public class Main {
+	static Scanner input = new Scanner(System.in);
 
 	public static void main(String[] args) {
+	
+		Course c = new Course(null, 0, 0);
+		FileRead f = new FileRead();
+		
 		LinkedList<Course> courses = new LinkedList<Course>();
-		
-		//EXAMPLE
-		
-		Course c1 = new Course("ARTIFICIAL INTELLIGENCE",6,8);
-		Course c2 = new Course("PROGRAMMING WITH GAME ENGINES",2,7);
-		Course c3 = new Course("ADVANCED DATABASE SYSTEMS",5,9);
-		Course c4 = new Course("CLOUD COMPUTING",4,6);
-		Course c5 = new Course("DATA MINING",3,8);
-		courses.add(c1);
-		courses.add(c2);
-		courses.add(c3);
-		courses.add(c4);
-		courses.add(c5);
+		courses = f.readCourseFile() ;
+	
+		int option = 0;
+		char ans;
 
-		BranchandBound(courses,12);
-		
+		do {
+
+			System.out.println("\t------------------------------------------");
+			System.out.println("\t+\tCourse Selection System\t\t +");
+			System.out.println("\t------------------------------------------");
+
+			System.out.println("\t|\tSelect Courses with: \t\t |");
+			System.out.println("\t|\t\t\t\t\t |");
+			System.out.println("\t|\t1.\tBranch and Bound\t |");
+			System.out.println("\t|\t2.\tGreedy Algorithm\t |");
+			System.out.println("\t|\t\t\t\t\t |");
+			System.out.println("\t------------------------------------------");
+
+			System.out.println();
+			System.out.print("\tChoose strategy (1/2): ");
+			option = input.nextInt();
+			
+			System.out.println();
+
+			while (option < 1 || option > 2) {
+				System.out.println("Invalid input.");
+				System.out.print("Enter your option (1/2): ");
+				option = input.nextInt();
+			}
+
+			switch (option) {
+
+			case 1:
+				BranchandBound(courses,12);	
+				break;
+			case 2:
+				Collections.sort(courses, new CourseComparator());
+				GreedyAlgo(courses,12);
+				break;
+			}
+
+			System.out.println();
+		    System.out.println("--------------------------------------------------------------------");
+			System.out.print("Do you still want to use the system?[Y/N]: ");
+			ans = input.next().charAt(0);
+			System.out.println();
+
+			if (ans == 'N' || ans == 'n') {
+				System.out.println("Thank you for using!");
+			}
+			
+		} while (ans == 'Y' || ans == 'y');
 		
 	}
 	
@@ -56,7 +97,6 @@ public class Main {
 			BnBNode node0= new BnBNode(s,c0);
 			
 			
-			
 			System.out.println("===Node 1===");
 			Queue<Course> temp1 = new LinkedList<>();
 			temp1.addAll(c1);
@@ -90,13 +130,17 @@ public class Main {
 
 		}		
 		else {
-			System.out.println("Solution for knapsack problem with Branch and Bound Method:");
-			System.out.println("total value: "+node.getBound());
-			System.out.println("Total weight: "+node.getWeight());
-			System.out.println("Items :");
+			System.out.println();
+		    System.out.println("--------------------------------------------------------------------");
+			System.out.println("    Solution for knapsack problem with Branch and Bound Method");
+		    System.out.println("--------------------------------------------------------------------");
+			System.out.println(" Courses Selected:");
 			for (int i=0;i<node.getCourses().size();i++) {
-				System.out.println((i+1)+". "+node.getCourses().get(i).getName());
+				System.out.println(" " + (i+1)+". "+node.getCourses().get(i).getName());
 			}
+			System.out.println();
+			System.out.println(" Total value: "+node.getBound());
+			System.out.println(" Total weight: "+node.getWeight());
 			return;
 		}
 		
@@ -115,7 +159,7 @@ public class Main {
 			}
 			else if (node.getWeight()<maxC) {	//Not exceed capacity
 
-				node.setCost(node.getCost()+(maxC-node.weight)*(c.ValuePerWeight()));
+				node.setCost(node.getCost()+(maxC-node.weight)*(c.valuePerWeight()));
 				//node.setWeight(node.getWeight()+c.getWeight());
 				break;
 
@@ -132,5 +176,33 @@ public class Main {
 		
 		return node;
 	}
+	
+	// Greedy Algorithm
+	public static void GreedyAlgo(LinkedList<Course> courses, double maxC) {
+	    double totalValue = 0;
+	    double totalWeight = 0;
+		
+		LinkedList<Course> selectedCourses = new LinkedList<Course>();
+		
+	    for (Course course : courses) {
+	        if (totalWeight + course.getWeight() <= maxC) {
+	        	selectedCourses.add(course);
+	            totalValue += course.getValue();
+	            totalWeight += course.getWeight();
+	        }
+	    }
+	    
+	    System.out.println("--------------------------------------------------------------------");
+	    System.out.println("\tSolution for knapsack problem with Greedy Algorithm");
+	    System.out.println("--------------------------------------------------------------------");
+	    System.out.println(" Courses Selected:");
+	    for (int i = 0; i < selectedCourses.size(); i++) {
+	        System.out.println(" " + (i + 1) + ". " + selectedCourses.get(i).getName());
+	    }
+	    System.out.println();
+	    System.out.println(" Total value: " + totalValue);
+	    System.out.println(" Total weight: " + totalWeight);
+	}
+
 
 }
